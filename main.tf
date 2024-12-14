@@ -78,6 +78,7 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
+#Subnet
 resource "azurerm_subnet" "snet" {
   name                 = "sn-ben-wus-tst-001"
   resource_group_name  = azurerm_resource_group.rg.name
@@ -85,6 +86,7 @@ resource "azurerm_subnet" "snet" {
   address_prefixes     = ["10.0.2.0/24"] //assign address space
 }
 
+#Network interface card
 resource "azurerm_network_interface" "nic" {
   name                = "nic-01-vmben-tst-001"
   location            = azurerm_resource_group.rg.location
@@ -97,6 +99,7 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
+#Virtual Machine
 resource "azurerm_virtual_machine" "vm" {
   name                  = "vm-ben-tst-001"
   location              = azurerm_resource_group.rg.location
@@ -127,4 +130,33 @@ resource "azurerm_virtual_machine" "vm" {
   tags = {
     environment = "staging"
   }
+}
+
+#Network security group
+resource "azurerm_network_security_group" "nsg" {
+  name                = "nsg-bentst-001"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  security_rule {
+    name                       = "test"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "test"
+  }
+}
+
+#Subnet and NSG association
+resource "azurerm_subnet_network_security_group_association" "nsg-snet" {
+  subnet_id                 = azurerm_subnet.snet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
 }
