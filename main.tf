@@ -2,6 +2,10 @@
 resource "azurerm_resource_group" "rg" {
   name     = var.rg
   location = var.location
+  labels = {
+    environment = env_map[var.target_enviromnet]
+  }
+  tags = var.compute_storage_tags
 }
 
 #App Service Plan
@@ -12,7 +16,7 @@ resource "azurerm_service_plan" "asp" {
 
   sku_name            = "P1v2"
   os_type             = "Windows"
-}
+} 
 
 #App Service
 resource "azurerm_windows_web_app" "wwa" {
