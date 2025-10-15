@@ -1,4 +1,4 @@
-variable "rg" {
+variable "rg_name" {
   type = string
   default = "rg-ben-tst-001"
   description = "value for the resource group"
@@ -16,6 +16,11 @@ variable "asp" {
 
 variable "wwa" {
   default = "ase-ben-wus-tst-001"
+  type = string
+}
+
+variable "wwa1" {
+  default = "ase-ben-wus-tst-002"
   type = string
 }
 
@@ -101,3 +106,13 @@ variable "env_instance_settings" {
   }
 }
 
+variable "administrator_login" {
+  type = string
+  default = "admin"
+  sensitive = true
+}
+
+variable "admin_password" {
+  type = string
+  sensitive = true
+}
