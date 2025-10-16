@@ -13,14 +13,16 @@ module "resource_group" {
 }
 
 #App Service Plan
-resource "azurerm_service_plan" "asp" {
-  name                = var.asp
-  location            = var.location
-  resource_group_name = var.rg_name
+module "app_service_plan" {
+  source = "./modules/asp"
 
-  sku_name            = "P1v2"
-  os_type             = "Windows"
-} 
+  asp_name = var.asp_name
+  rg_name = module.resource_group.rg_name
+  location = module.resource_group.rg_location
+
+  sku_name = var.sku_name
+  os_type = var.os_type
+}
 
 #App Service
 #using count variable 
@@ -29,7 +31,7 @@ resource "azurerm_windows_web_app" "wwa" {
   name                = "waa${count.index}"
   resource_group_name = var.rg_name
   location            = var.location
-  service_plan_id     = azurerm_service_plan.asp.id
+  service_plan_id     = module.app_service_plan.asp_id
 
   site_config {}
 }

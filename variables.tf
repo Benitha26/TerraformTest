@@ -1,6 +1,6 @@
 variable "rg_name" {
   type = string
-  default = "rg-ben-tst-001"
+  #default = "rg-ben-tst-001"
   description = "value for the resource group"
 }
 
@@ -9,9 +9,19 @@ variable "location" {
   default = "East US"
 }
 
-variable "asp" {
-  default = "asp-ben-wus-tst"
+variable "asp_name" {
+  #default = "asp-ben-wus-tst"
   type = string
+}
+
+variable "sku_name" {
+  type = string
+  description = "sku name"
+}
+
+variable "os_type" {
+    type = string
+    description = "type of OS"
 }
 
 variable "wwa" {
